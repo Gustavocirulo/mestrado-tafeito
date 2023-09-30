@@ -1,25 +1,43 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from "./App";
-import Login from "./screens/Login";
-import Tasks from "./screens/Tasks";
+import * as React from "react";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Route,
+  Link,
+} from "react-router-dom";
+import Login from './screens/Login';
+import Tasks from './screens/Tasks';
+import ProtectRoute from './provider/protectedRoute';
 
-const router = createBrowserRouter([
+const Routes = () => {
+
+  const authenticatedRoutes = [
     {
-        path: "/",
-        element: (
-            <App>
-                <Login/>
-            </App>
-        ),
-    },
-    {
-        path: "tarefas",
-        element: (
-            <App>
-                <Tasks/>
-            </App>
-        ),
+      path: '/',
+      element: <ProtectRoute />,
+      children: [
+        {
+          path: "/tarefas",
+          element: <Tasks />
+        }
+      ]
     }
-]);
+  ]
 
-export {router};
+  const unAuthenticatedRoutes = [
+    {
+      path: '/login',
+      element: <Login />
+    },
+  ]
+
+  const router = createBrowserRouter([
+    ...unAuthenticatedRoutes,
+    ...authenticatedRoutes
+  ])
+
+  return <RouterProvider router={router} />
+
+}
+
+export default Routes;

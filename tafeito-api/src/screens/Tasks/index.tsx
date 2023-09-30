@@ -39,7 +39,8 @@ const Tasks = () => {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters sx={{
-          justifyContent: 'space-between'
+          justifyContent: 'space-between', 
+          width: '100%'
         }}>
           <Box sx={{
             display: 'flex',
