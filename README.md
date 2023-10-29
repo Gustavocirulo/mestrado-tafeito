@@ -6,6 +6,18 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm install`
+This command is used in Node.js projects to install the required dependencies defined in the `package.json` file. These dependencies may include libraries, packages, or modules that your project relies on to function correctly. Running `npm install` is a crucial step when setting up a project, as it ensures that all the necessary dependencies are downloaded and installed locally.
+
+To use `npm install` in your project, follow these steps:
+
+1. Navigate to the project directory in your terminal.
+2. Run `npm install`.
+
+This command will read the `package.json` file and install all the specified dependencies into a `node_modules` directory in your project. These dependencies are crucial for your project to run successfully. Be sure to include the `node_modules` directory in your `.gitignore` file to prevent it from being included in your version control system.
+
+Remember to run `npm install` whenever you clone a project, switch branches, or update the dependencies defined in your `package.json` file to keep your project up to date and fully functional.
+
 ### `npm start`
 
 Runs the app in the development mode.\

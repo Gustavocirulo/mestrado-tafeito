@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -11,12 +12,26 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import TaskAlt from "@mui/icons-material/TaskAlt";
 import Logout from "@mui/icons-material/Logout";
-import { useNavigate } from 'react-router-dom';
 
+import { NavBarProps } from "./NavBar";
+import { url_usuarios_autenticado } from '../../utils/api';
 
-const Tasks = () => {
+import { api } from '../../provider/customAxios';
 
-  const navigate = useNavigate();
+const NavBar = (props: NavBarProps) => {
+  const { logout } = props;
+
+  const [userData, setUserData] = useState<null | {
+    nome: string;
+    login: string;
+    admin: boolean;
+  }>(null);
+
+  useEffect(() => {
+    api.get(url_usuarios_autenticado).then((response) => {
+      setUserData(response.data.usuario);
+    });
+  }, []);
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
@@ -30,22 +45,21 @@ const Tasks = () => {
     setAnchorElUser(null);
   };
 
-  const logout = () => {
-    setAnchorElUser(null);
-    navigate('/');
-  }
-
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{
-          justifyContent: 'space-between', 
-          width: '100%'
-        }}>
-          <Box sx={{
-            display: 'flex',
-            alignItems: 'center'
-          }}>
+        <Toolbar
+          disableGutters
+          sx={{
+            justifyContent: "space-between",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
             <TaskAlt sx={{ display: "flex", mr: 2 }} />
 
             <Typography
@@ -65,6 +79,9 @@ const Tasks = () => {
             >
               TaFeito
             </Typography>
+            {userData ? (
+              <Typography> Bem vindo: {userData.nome} </Typography>
+            ) : null}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
@@ -101,4 +118,4 @@ const Tasks = () => {
   );
 };
 
-export default Tasks;
+export default NavBar;

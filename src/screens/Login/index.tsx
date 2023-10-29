@@ -10,12 +10,15 @@ import CardActions from '@mui/material/CardActions';
 import { FormControl, InputLabel, 
         FilledInput, InputAdornment, IconButton, Typography } from '@mui/material';
 import { VisibilityOff, Visibility } from '@mui/icons-material'
-import { useNavigate } from 'react-router-dom'
+
 import {CustomizedCardHeader} from './styles';
+import { useNavigate } from 'react-router-dom';
 
-
+import { useAuth } from '../../provider/authProvider';
 const Login = () => {
-  
+
+  const { token, setToken } = useAuth();
+
   const [isButtonActive, setIsButtonActive] = useState(true);
   const [username, setUsername] = useState<string|null>(null)
   const [password, setPassword] = useState<string|null>(null)
@@ -27,7 +30,13 @@ const Login = () => {
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   }
-  
+
+  useEffect(() => {
+    if(token) {
+      navigate('/tarefas', {replace: true});
+    }
+  }, [token])
+
   useEffect(() => {
     if(username !== null && username !== '' &&
        password !== null && password !== '') {
@@ -56,14 +65,14 @@ const Login = () => {
         }
       })
       .then(data => {
-        console.log('sucesso', JSON.stringify(data))
-        console.log(data)
         if(data.responseStatus === 422 && data.data?.mensagem) {
           setErrorMessage(data.data?.mensagem)
         } else if(data.responseStatus === 400) {
           setErrorMessage('Requisição inválida!')
         } else if(data.responseStatus === 200) {
-          navigate('/tarefas')
+          if(data?.data?.token){
+            setToken(data?.data?.token)
+          }
         } 
       })
       .catch(error => setErrorMessage('Erro no servidor, tente novamente em alguns minutos!'));
@@ -71,7 +80,7 @@ const Login = () => {
   return (
       <Box sx={{
         width: '100%',
-        height: '100vh',
+        height: '100%',
         alignItems: 'center',
         display: 'flex',
         justifyContent: 'center'
